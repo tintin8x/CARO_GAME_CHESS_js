@@ -31,14 +31,13 @@
 </body>
 <script>
 
-    let rowNum;
-    let colNum;
-    let winNum;
-    let countX = 0;
-    let countO = 0;
-
-    //let board = new Array(rowNum);
-    let board = [];
+    let rowNum; // Number of board game row
+    let colNum; // Number of board game column
+    let winNum; // Number of continued mark to win
+    let countX = 0; // Count number of 'X' cells
+    let countO = 0; // Count number of 'O' cells
+    let countTotal = 0; // Count number of both 'X' and 'O' cells
+    let board = []; // 2D array to store 'X' and 'O'
 
     // Create game board
     function crtBoard() {
@@ -77,20 +76,23 @@
             for (let j = 0; j < colNum; j++) {
                 let cID = "c" + i + j;
                 document.getElementById(cID).innerHTML = "";
+                document.getElementById(cID).style.backgroundColor = 'white';
                 board[i][j] = "";
             }
         }
         document.getElementById('msg').innerHTML = "";
         countX = 0;
         countO = 0;
+        countTotal = 0;
     }
 
     // Click one board cell to play
-    // Add X/O to clicked cell
     function playGame(cID) {
         let sltPlayer = document.getElementsByName('sltPlayer');
         let r = parseInt(cID.substring(1, 2));
         let c = parseInt(cID.substring(2, 3));
+
+        // Add X/O to clicked cell
         // First time
         while (document.getElementById(cID).innerHTML == "") {
 
@@ -123,87 +125,116 @@
         }
         //Who is winner?
         checkWin(r, c);
+        //Game i draw?
+        countTotal++;
+        if (countTotal == (rowNum * colNum)) {
+            alert('Game is DRAW!!!');
+        }
     }
 
+    // Check winner
     function checkWin(r, c) {
-
         let count = 0;
+        let check = [];
         // Find by col
-        for (let i = 0; i < rowNum; i++) {
-            if (board[i][c] == board[r][c]) {
-                count++;
+        for (let i = -winNum + 1; i < winNum; i++) {
+            if ((r + i >= 0) && (r + i < colNum)) {
+                if (board[r + i][c] == board[r][c]) {
+                    check[count * 2] = r + i;
+                    check[count * 2 + 1] = c;
+                    count++;
+                } else {
+                    count = 0;
+                    check = [];
+                }
             } else {
                 count = 0;
             }
             if (count == winNum) {
                 alert('Winner: ' + board[r][c]);
+                for (let k = 0; k < check.length; k = k + 2) {
+                    let cell = document.getElementById('c' + check[k] + check[k + 1]);
+                    cell.style.backgroundColor = 'blue';
+                }
                 break;
             }
         }
         // Find by row
         count = 0;
-        for (let i = 0; i < colNum; i++) {
-            if (board[r][i] == board[r][c]) {
-                count++;
+        check = [];
+        for (let i = -winNum + 1; i < winNum; i++) {
+            if ((c + i >= 0) && (c + i < colNum)) {
+                if (board[r][c + i] == board[r][c]) {
+                    check[count * 2] = r;
+                    check[count * 2 + 1] = c + i;
+                    count++;
+                } else {
+                    count = 0;
+                    check = [];
+                }
             } else {
                 count = 0;
             }
             if (count == winNum) {
                 alert('Winner: ' + board[r][c]);
+                for (let k = 0; k < check.length; k = k + 2) {
+                    let cell = document.getElementById('c' + check[k] + check[k + 1]);
+                    cell.style.backgroundColor = 'blue';
+                }
                 break;
             }
         }
         // Find by cross 1
         count = 0;
+        check = [];
         for (let i = -winNum + 1; i < winNum; i++) {
             if ((r + i >= 0) && (c + i >= 0) && (r + i < rowNum) && (c + i < colNum)) {
                 if (board[r + i][c + i] == board[r][c]) {
+                    check[count * 2] = r + i;
+                    check[count * 2 + 1] = c + i;
                     count++;
                 } else {
                     count = 0;
+                    check = [];
                 }
             } else {
                 count = 0;
             }
             if (count == winNum) {
                 alert('Winner: ' + board[r][c]);
+                for (let k = 0; k < check.length; k = k + 2) {
+                    let cell = document.getElementById('c' + check[k] + check[k + 1]);
+                    cell.style.backgroundColor = 'blue';
+                }
                 break;
             }
         }
         // Find by cross 2
         count = 0;
+        check = [];
         for (let i = -winNum + 1; i < winNum; i++) {
             if ((r - i >= 0) && (c + i >= 0) && (r - i < rowNum) && (c + i < colNum)) {
                 if (board[r - i][c + i] == board[r][c]) {
+                    check[count * 2] = r - i;
+                    check[count * 2 + 1] = c + i;
                     count++;
                 } else {
                     count = 0;
+                    check = [];
                 }
             } else {
                 count = 0;
             }
             if (count == winNum) {
                 alert('Winner: ' + board[r][c]);
+                for (let k = 0; k < check.length; k = k + 2) {
+                    let cell = document.getElementById('c' + check[k] + check[k + 1]);
+                    cell.style.backgroundColor = 'blue';
+                }
                 break;
             }
         }
-
-        // Check draw
-        count = 0;
-        let sltPlayer = document.getElementsByName('sltPlayer');
-        for (let i = 0; i < rowNum; i++) {
-            for (let j = 0; j < colNum; j++) {
-                if (board[i][j] == sltPlayer[0].value || board[i][j] == sltPlayer[1].value) {
-                    count = count + 1;
-                }
-            }
-        }
-        if (count == (rowNum * colNum)) {
-            alert('Game is DRAW!!!');
-        }
-
     }
-
 
 </script>
 </html>
