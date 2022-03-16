@@ -162,7 +162,9 @@
                 } else {
                     count = 0;
                 }
-            }else {count = 0;}
+            } else {
+                count = 0;
+            }
             if (count == winNum) {
                 alert('Winner: ' + board[r][c]);
                 break;
@@ -171,18 +173,35 @@
         // Find by cross 2
         count = 0;
         for (let i = -winNum + 1; i < winNum; i++) {
-            if ((r - i >= 0) && (c + i >= 0) && (r - i < rowNum) && (c + i < colNum)){
+            if ((r - i >= 0) && (c + i >= 0) && (r - i < rowNum) && (c + i < colNum)) {
                 if (board[r - i][c + i] == board[r][c]) {
                     count++;
                 } else {
                     count = 0;
                 }
-            }else {count = 0;}
+            } else {
+                count = 0;
+            }
             if (count == winNum) {
                 alert('Winner: ' + board[r][c]);
                 break;
             }
         }
+
+        // Check draw
+        count = 0;
+        let sltPlayer = document.getElementsByName('sltPlayer');
+        for (let i = 0; i < rowNum; i++) {
+            for (let j = 0; j < colNum; j++) {
+                if (board[i][j] == sltPlayer[0].value || board[i][j] == sltPlayer[1].value) {
+                    count = count + 1;
+                }
+            }
+        }
+        if (count == (rowNum * colNum)) {
+            alert('Game is DRAW!!!');
+        }
+
     }
 
 
